@@ -1,0 +1,29 @@
+button {
+  background-color: bisque;
+}
+
+button:hover {
+  background-color: aquamarine;
+}
+
+table {
+  td,
+  th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  th {
+    background-color: white;
+  }
+  tr {
+    &:hover {
+      cursor: pointer;
+      background-color: #ddd;
+    }
+  }
+}
+
+input,
+textarea {
+  padding: 10px;
+}
