@@ -20,6 +20,7 @@ const initialState = {
   ],
 };
 
+// eslint-disable-next-line no-unused-vars
 export default function productReducer(state = initialState, { type, payload }) {
   switch (type) {
     case 'ADD_PRODUCT': {
