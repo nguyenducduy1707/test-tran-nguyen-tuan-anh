@@ -18,8 +18,6 @@ function Module(props) {
   const history = useHistory();
   const moduleSelected = useSelector(detailModuleSelector(id));
 
-  console.log(moduleSelected);
-
   const goBack = () => {
     history.goBack();
   };

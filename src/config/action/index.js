@@ -24,10 +24,10 @@ export function changeProduct(productSelected, name, prdFunction, detail, nigp) 
   };
 }
 
-export function deleteProduct(product) {
+export function deleteProduct(id) {
   return {
     type: 'DELETE_PRODUCT',
-    payload: { id: product.id },
+    payload: { id },
   };
 }
 
@@ -58,9 +58,9 @@ export function changeModule(moduleSelected, label, name, data, des) {
   };
 }
 
-export function deleteModule(module) {
+export function deleteModule(id) {
   return {
     type: 'DELETE_MODULE',
-    payload: { id: module.id },
+    payload: { id },
   };
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { addProduct, deleteProduct } from '../config/action/index';
+import { addProduct, deleteModule, deleteProduct } from '../config/action/index';
 import { IconClose, IconDelete } from '../utils/icons';
 
 function Product() {
@@ -162,10 +162,7 @@ function Product() {
                         <td className="border border-gray-400 px-2 py-1">
                           <div className="flex flex-row items-center justify-between">
                             <input type="checkbox" name="toggleModule" />
-                            <button
-                              type="button"
-                              onClick={() => dispatch(deleteProduct(module.id))}
-                            >
+                            <button type="button" onClick={() => dispatch(deleteModule(module.id))}>
                               <IconDelete />
                             </button>
                           </div>
