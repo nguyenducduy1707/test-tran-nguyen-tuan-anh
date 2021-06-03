@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { changeProduct, deleteModule } from "../config/action";
-import { detailProductSelector } from "../config/selectors";
+import { changeModule, changeProduct, deleteModule } from "../config/action";
+import {
+  detailModuleSelector,
+  detailProductSelector,
+} from "../config/selectors";
 
 function ProductDetail(props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentModuleId, setCurrentModuleId] = useState();
+  const dispatch = useDispatch();
+
   const [nameText, setNameText] = useState({
     name: "",
     productFunction: "",
@@ -13,7 +20,14 @@ function ProductDetail(props) {
   });
   const { id } = props.match.params;
   const productSelected = useSelector(detailProductSelector(id));
-  const dispatch = useDispatch();
+
+  const moduleSelected = useSelector(detailModuleSelector(currentModuleId));
+  console.log(
+    "🚀 ~ file: ProductDetail.jsx ~ line 25 ~ ProductDetail ~ moduleSelected",
+    moduleSelected
+  );
+
+  const { fieldLabel, fieldName, fieldData, fieldDes } = moduleSelected;
 
   const { detail, productFunction, name, nigp, productModules } =
     productSelected;
@@ -57,10 +71,141 @@ function ProductDetail(props) {
     );
   };
 
+  const [moduleText, setModuleText] = useState({
+    fieldLabel: "",
+    fieldName: "",
+    fieldData: "",
+    fieldDes: "",
+  });
+
+  const handleFieldLabelChange = (event) => {
+    setModuleText({
+      ...moduleText,
+      fieldLabel: event.target.value,
+    });
+  };
+
+  const handleFieldNameChange = (event) => {
+    setModuleText({
+      ...moduleText,
+      fieldName: event.target.value,
+    });
+  };
+
+  const handleFieldDataChange = (event) => {
+    setModuleText({
+      ...moduleText,
+      fieldData: event.target.value,
+    });
+  };
+
+  const handleFieldDesChange = (event) => {
+    setModuleText({
+      ...moduleText,
+      fieldDes: event.target.value,
+    });
+  };
+
+  const handleChangeModule = () => {
+    dispatch(
+      changeModule(
+        currentModuleId,
+        moduleText.fieldLabel,
+        moduleText.fieldName,
+        moduleText.fieldData,
+        moduleText.fieldDes
+      )
+    );
+    setModuleText({
+      fieldLabel: "",
+      fieldName: "",
+      fieldData: "",
+      fieldDes: "",
+    });
+    setIsOpen(false);
+  };
   const modules = useSelector((state) => state.test.tasks?.productModules);
 
   return (
     <section className="w-full p-4">
+      {isOpen && (
+        <div className="bg-gray-400 absolute h-auto w-3/4 shadow-2xl rounded-xl p-5 left-64">
+          <header className="flex justify-between border-b border-black mb-6 pb-3">
+            <span>Update module</span>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 cursor-pointer"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                onClick={() => {
+                  setIsOpen(false);
+                }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </span>
+          </header>
+          <section>
+            <form action="">
+              <div>
+                <label htmlFor="">Field Label : {fieldLabel}</label>
+                <input
+                  className="border w-full border-black"
+                  type="text"
+                  value={moduleText.fieldLabel}
+                  onChange={handleFieldLabelChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="">Field Name: {fieldName}</label>
+                <textarea
+                  className="border w-full border-black"
+                  type="text"
+                  cols="10"
+                  rows="2"
+                  value={moduleText.fieldName}
+                  onChange={handleFieldNameChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="">Field Data : {fieldData}</label>
+                <textarea
+                  className="border w-full border-black"
+                  type="text"
+                  cols="10"
+                  rows="2"
+                  value={moduleText.fieldData}
+                  onChange={handleFieldDataChange}
+                />
+              </div>
+              <div>
+                <label htmlFor="">Field Description : {fieldDes}</label>
+                <input
+                  className="border w-full border-black"
+                  type="text"
+                  value={moduleText.fieldDes}
+                  onChange={handleFieldDesChange}
+                />
+              </div>
+            </form>
+          </section>
+          <footer>
+            <button
+              className="border border-black px-4 py-1 mt-2"
+              onClick={handleChangeModule}
+            >
+              Change
+            </button>
+          </footer>
+        </div>
+      )}
       <div className="flex justify-around">
         <span>Business Unit Code: SOL01</span>
         <span>Company/Org.Name: Solomons International</span>
@@ -129,7 +274,7 @@ function ProductDetail(props) {
         >
           Save
         </button>
-        <Link to="/module">
+        <Link to={`/module/${id}`}>
           <button className="border border-gray-400 py-2 px-4 rounded-md">
             Add Product Modules
           </button>
@@ -154,7 +299,7 @@ function ProductDetail(props) {
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className={`h-6 w-6 ${
-                        Object.values(productModules).includes(module.id)
+                        Object.keys(productModules).includes(String(module.id))
                           ? "text-red-600"
                           : ""
                       } `}
@@ -169,20 +314,27 @@ function ProductDetail(props) {
                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                       />
                     </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
+                    <button
+                      onClick={() => {
+                        setCurrentModuleId(module?.id);
+                        setIsOpen(true);
+                      }}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                        />
+                      </svg>
+                    </button>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"

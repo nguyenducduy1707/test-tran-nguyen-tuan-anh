@@ -8,8 +8,12 @@ const initialState = {
         detail: "detail 0",
         nigp: "nigp 0",
         productModules: {
-          1: 1,
-          2: 2,
+          0: {
+            id: 0,
+          },
+          1: {
+            id: 1,
+          },
         }, // id của productModules
       },
       1: {
@@ -19,7 +23,9 @@ const initialState = {
         detail: "detail 1",
         nigp: "nigp 1",
         productModules: {
-          1: 1,
+          0: {
+            id: 0,
+          },
         }, // id của productModules
       },
     },
@@ -50,7 +56,8 @@ export default function productReducer(state = initialState, action) {
   switch (action.type) {
     case "ADD_PRODUCT": {
       const id = nextProductId(state.tasks.products);
-      const { name, productFunction, detail, nigp } = action.payload;
+      const { name, productFunction, detail, nigp, productModules } =
+        action.payload;
       return {
         ...state,
         tasks: {
@@ -63,6 +70,7 @@ export default function productReducer(state = initialState, action) {
               productFunction: productFunction,
               detail: detail,
               nigp: nigp,
+              productModules: productModules,
             },
           },
         },
@@ -102,16 +110,22 @@ export default function productReducer(state = initialState, action) {
     }
     case "ADD_MODULE": {
       const id = nextProductId(state.tasks.productModules);
-      const { fieldLabel, fieldName, fieldData, fieldDes } = action.payload;
+      const { moduleProtectedId, fieldLabel, fieldName, fieldData, fieldDes } =
+        action.payload;
       return {
         ...state,
         tasks: {
           ...state.tasks,
           products: {
             ...state.tasks.products,
-            productModules: {
-              ...state.tasks.products.productModules,
-              [id]: id,
+            [moduleProtectedId]: {
+              ...(state.tasks.products[moduleProtectedId] ?? {}),
+              productModules: {
+                ...state.tasks.products[moduleProtectedId].productModules,
+                [id]: {
+                  id: id,
+                },
+              },
             },
           },
           productModules: {
@@ -122,6 +136,25 @@ export default function productReducer(state = initialState, action) {
               fieldName: fieldName,
               fieldData: fieldData,
               fieldDes: fieldDes,
+            },
+          },
+        },
+      };
+    }
+    case "CHANGE_MODULE": {
+      const { id, fieldLabel, fieldName, fieldData, fieldDes } = action.payload;
+      return {
+        ...state,
+        tasks: {
+          ...state.tasks,
+          productModules: {
+            ...state.tasks.productModules,
+            [id]: {
+              ...(state.tasks.productModules[id] ?? {}),
+              fieldLabel: fieldLabel ?? "",
+              fieldName: fieldName ?? "",
+              fieldData: fieldData ?? "",
+              fieldDes: fieldDes ?? "",
             },
           },
         },
@@ -140,6 +173,7 @@ export default function productReducer(state = initialState, action) {
         },
       };
     }
+
     default:
       return state;
   }

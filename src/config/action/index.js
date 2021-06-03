@@ -2,7 +2,8 @@ export function addProduct(
   textName,
   textProductFunction,
   textDetail,
-  textNigp
+  textNigp,
+  productModules
 ) {
   return {
     type: "ADD_PRODUCT",
@@ -11,6 +12,7 @@ export function addProduct(
       productFunction: textProductFunction,
       detail: textDetail,
       nigp: textNigp,
+      productModules: productModules,
     },
   };
 }
@@ -42,10 +44,36 @@ export function deleteProduct(product) {
 }
 
 // Module
-export function addModule(fieldLabel, fieldName, fieldData, fieldDes) {
+export function addModule(
+  moduleProtected,
+  fieldLabel,
+  fieldName,
+  fieldData,
+  fieldDes
+) {
   return {
     type: "ADD_MODULE",
     payload: {
+      moduleProtectedId: moduleProtected.id,
+      fieldLabel: fieldLabel,
+      fieldName: fieldName,
+      fieldData: fieldData,
+      fieldDes: fieldDes,
+    },
+  };
+}
+
+export function changeModule(
+  moduleSelected,
+  fieldLabel,
+  fieldName,
+  fieldData,
+  fieldDes
+) {
+  return {
+    type: "CHANGE_MODULE",
+    payload: {
+      id: moduleSelected,
       fieldLabel: fieldLabel,
       fieldName: fieldName,
       fieldData: fieldData,

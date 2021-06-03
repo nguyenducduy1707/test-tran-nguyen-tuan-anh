@@ -1,17 +1,25 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { addModule } from "../config/action";
+import { detailModuleSelector } from "../config/selectors";
 
-function Module({ id }) {
+function Module(props) {
   const [nameText, setNameText] = useState({
     fieldLabel: "",
     fieldName: "",
     fieldData: "",
     fieldDes: "",
   });
+  const { id } = props.match.params;
+
   const dispatch = useDispatch();
   const history = useHistory();
+  const moduleSelected = useSelector(detailModuleSelector(id));
+  console.log(
+    "🚀 ~ file: Module.jsx ~ line 19 ~ Module ~ moduleSelected",
+    moduleSelected
+  );
 
   const goBack = () => {
     history.goBack();
@@ -47,6 +55,7 @@ function Module({ id }) {
   const handleAddModule = () => {
     dispatch(
       addModule(
+        moduleSelected,
         nameText.fieldLabel,
         nameText.fieldName,
         nameText.fieldData,
@@ -79,7 +88,7 @@ function Module({ id }) {
             />
           </div>
           <div>
-            <label htmlFor="">Product Function</label>
+            <label htmlFor="">Field Name</label>
             <textarea
               className="border w-full border-black"
               type="text"
@@ -90,7 +99,7 @@ function Module({ id }) {
             />
           </div>
           <div>
-            <label htmlFor="">Product Details:</label>
+            <label htmlFor="">Field Data</label>
             <textarea
               className="border w-full border-black"
               type="text"
@@ -101,7 +110,7 @@ function Module({ id }) {
             />
           </div>
           <div>
-            <label htmlFor="">NIGP/UNPSC Codes :</label>
+            <label htmlFor="">Field Description</label>
             <input
               className="border w-full border-black"
               type="text"

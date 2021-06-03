@@ -13,6 +13,7 @@ function Capabilities() {
     productFunction: "",
     detail: "",
     nigp: "",
+    module: {},
   });
 
   const handleNameChange = (event) => {
@@ -49,7 +50,8 @@ function Capabilities() {
         nameText.name,
         nameText.productFunction,
         nameText.detail,
-        nameText.nigp
+        nameText.nigp,
+        nameText.module
       )
     );
     setNameText({
@@ -57,14 +59,23 @@ function Capabilities() {
       productFunction: "",
       detail: "",
       nigp: "",
+      module: {
+        id: "",
+      },
     });
     setIsOpen(false);
   };
 
+  const modules = useSelector((state) => state.test.tasks?.productModules);
+
+  console.log(
+    "🚀 ~ file: Capabilities.jsx ~ line 8 ~ Capabilities ~ nameText.module",
+    nameText.module
+  );
   return (
-    <div className="bg-gray-100 w-full p-5 h-screen">
+    <div className="bg-gray-100 w-full h-screen p-5">
       {isOpen && (
-        <div className="bg-gray-400 absolute h-96 w-3/4 shadow-2xl rounded-xl p-5 ">
+        <div className="bg-gray-400 absolute h-auto w-3/4 shadow-2xl rounded-xl p-5 left-64">
           <header className="flex justify-between border-b border-black mb-6 pb-3">
             <span>Add product</span>
             <span>
@@ -104,7 +115,7 @@ function Capabilities() {
                   className="border w-full border-black"
                   type="text"
                   cols="10"
-                  rows="2"
+                  rows="1"
                   value={nameText.productFunction}
                   onChange={handleProductFunctionChange}
                 />
@@ -115,7 +126,7 @@ function Capabilities() {
                   className="border w-full border-black"
                   type="text"
                   cols="10"
-                  rows="2"
+                  rows="1"
                   value={nameText.detail}
                   onChange={handleDetailChange}
                 />
@@ -130,6 +141,103 @@ function Capabilities() {
                 />
               </div>
             </form>
+            <div className="mt-7">
+              <div>
+                Select Module:
+                <b className="ml-2">{Object.keys(nameText.module) + ","}</b>
+              </div>
+              <table className="w-full p-4 text-left border border-gray-700">
+                <tbody>
+                  <tr>
+                    <th>Field</th>
+                    <th>Field Name</th>
+                    <th>Field Data</th>
+                    <th>Action</th>
+                  </tr>
+                  {Object.values(modules).map((module) => (
+                    <tr key={module.id}>
+                      <td>Module</td>
+                      <td>{module.fieldName}</td>
+                      <td>{module.fieldData}</td>
+                      <td>
+                        <div className="flex cursor-pointer space-x-3">
+                          {/* <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                            />
+                          </svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                            />
+                          </svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg> */}
+                          <button
+                            onClick={() => {
+                              setNameText({
+                                ...nameText,
+                                module: {
+                                  ...nameText.module,
+                                  [module.id]: {
+                                    id: module.id,
+                                  },
+                                },
+                              });
+                            }}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-6 w-6 "
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
           <footer>
             <button
@@ -181,7 +289,7 @@ function Capabilities() {
                   <td>{eachProduct.nigp}</td>
                   <td>
                     <div className="flex cursor-pointer space-x-3">
-                      <Link to={`./product-detail/${eachProduct.id}`}>
+                      <Link to={`/product-detail/${eachProduct.id}`}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6"
