@@ -60,17 +60,13 @@ function Product() {
       prdFunction: '',
       detail: '',
       nigp: '',
-      module: {
-        id: '',
-      },
+      module: [],
     });
     setIsOpen(false);
   };
 
   const modules = useSelector((state) => state.product.productModules);
   const products = useSelector((state) => state.product.products);
-
-  console.log(123, modules);
 
   return (
     <div className="w-full h-screen p-5">
@@ -156,19 +152,28 @@ function Product() {
                     {modules.map((module, index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <tr key={index}>
-                        <td className="border border-gray-400 px-2 py-1"> {module.p}</td>
+                        <td className="border border-gray-400 px-2 py-1"> {module.label}</td>
                         <td className="border border-gray-400 px-2 py-1"> {module.name}</td>
                         <td className="border border-gray-400 px-2 py-1"> {module.data}</td>
                         <td className="border border-gray-400 px-2 py-1">
                           <div className="flex flex-row items-center justify-between">
-                            <input type="checkbox" name="toggleModule" />
+                            <input
+                              type="checkbox"
+                              name="toggleModule"
+                              onClick={() => {
+                                setNameText({
+                                  ...nameText,
+                                  module: [...nameText.module, module.id],
+                                });
+                              }}
+                            />
                             <button type="button" onClick={() => dispatch(deleteModule(module.id))}>
                               <IconDelete />
                             </button>
                           </div>
                         </td>
                       </tr>
-                    ))}{' '}
+                    ))}
                   </tbody>
                 </table>
               </div>
