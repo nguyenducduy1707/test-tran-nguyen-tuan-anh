@@ -1,127 +1,119 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { addModule } from "../config/action";
-import { detailModuleSelector } from "../config/selectors";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { addModule } from '../config/action';
+import { detailModuleSelector } from '../config/selectors';
 
 function Module(props) {
   const [nameText, setNameText] = useState({
-    fieldLabel: "",
-    fieldName: "",
-    fieldData: "",
-    fieldDes: "",
+    label: '',
+    name: '',
+    data: '',
+    des: '',
   });
+  // eslint-disable-next-line react/destructuring-assignment
   const { id } = props.match.params;
 
   const dispatch = useDispatch();
   const history = useHistory();
   const moduleSelected = useSelector(detailModuleSelector(id));
-  console.log(
-    "🚀 ~ file: Module.jsx ~ line 19 ~ Module ~ moduleSelected",
-    moduleSelected
-  );
+
+  console.log(moduleSelected);
 
   const goBack = () => {
     history.goBack();
   };
-  const handleFieldLabelChange = (event) => {
+  const handlelabelChange = (event) => {
     setNameText({
       ...nameText,
-      fieldLabel: event.target.value,
+      label: event.target.value,
     });
   };
 
-  const handleFieldNameChange = (event) => {
+  const handlenameChange = (event) => {
     setNameText({
       ...nameText,
-      fieldName: event.target.value,
+      name: event.target.value,
     });
   };
 
-  const handleFieldDataChange = (event) => {
+  const handledataChange = (event) => {
     setNameText({
       ...nameText,
-      fieldData: event.target.value,
+      data: event.target.value,
     });
   };
 
-  const handleFieldDesChange = (event) => {
+  const handledesChange = (event) => {
     setNameText({
       ...nameText,
-      fieldDes: event.target.value,
+      des: event.target.value,
     });
   };
 
   const handleAddModule = () => {
-    dispatch(
-      addModule(
-        moduleSelected,
-        nameText.fieldLabel,
-        nameText.fieldName,
-        nameText.fieldData,
-        nameText.fieldDes
-      )
-    );
+    dispatch(addModule(moduleSelected, nameText.label, nameText.name, nameText.data, nameText.des));
     setNameText({
-      fieldLabel: "",
-      fieldName: "",
-      fieldData: "",
-      fieldDes: "",
+      label: '',
+      name: '',
+      data: '',
+      des: '',
     });
     goBack();
   };
 
   return (
-    <div className=" p-5 w-full">
+    <div className="h-screen p-5 w-full">
       <header className="border-b border-black mb-6 pb-3">
-        <span>Add/Update Features/Modules</span>
+        <span>Add/Update Modules</span>
       </header>
       <section>
         <form action="">
           <div>
-            <label htmlFor="">Field Label</label>
+            <p>Field Label</p>
             <input
               className="border w-full border-black"
               type="text"
-              value={nameText.fieldLabel}
-              onChange={handleFieldLabelChange}
+              value={nameText.label}
+              onChange={handlelabelChange}
             />
           </div>
           <div>
-            <label htmlFor="">Field Name</label>
+            <p>Field Name</p>
             <textarea
               className="border w-full border-black"
               type="text"
               cols="10"
               rows="2"
-              value={nameText.fieldName}
-              onChange={handleFieldNameChange}
+              value={nameText.name}
+              onChange={handlenameChange}
             />
           </div>
           <div>
-            <label htmlFor="">Field Data</label>
+            <p>Field Data</p>
             <textarea
               className="border w-full border-black"
               type="text"
               cols="10"
               rows="2"
-              value={nameText.fieldData}
-              onChange={handleFieldDataChange}
+              value={nameText.data}
+              onChange={handledataChange}
             />
           </div>
           <div>
-            <label htmlFor="">Field Description</label>
+            <p>Field Description</p>
             <input
               className="border w-full border-black"
               type="text"
-              value={nameText.fieldDes}
-              onChange={handleFieldDesChange}
+              value={nameText.des}
+              onChange={handledesChange}
             />
           </div>
         </form>
       </section>
       <footer>
         <button
+          type="button"
           className="border border-black px-4 py-1 mt-2"
           onClick={handleAddModule}
         >

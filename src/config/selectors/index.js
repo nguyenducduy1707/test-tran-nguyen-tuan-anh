@@ -1,7 +1,6 @@
-const detailProductSelector = (taskId) => (state) =>
-  state?.test?.tasks?.products[taskId || ""] ?? {};
+const detailProductSelector = (taskId) => (state) => state.product.products[taskId || ''] ?? {};
 
 const detailModuleSelector = (taskId) => (state) =>
-  state?.test?.tasks?.productModules[taskId || ""] ?? {};
+  state.product.productModules[taskId || ''] ?? {};
 
 export { detailProductSelector, detailModuleSelector };

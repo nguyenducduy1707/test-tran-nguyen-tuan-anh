@@ -1,5 +1,6 @@
-import { createStore } from "redux";
-import rootReducer from "./reducer";
+/* eslint-disable no-underscore-dangle */
+import { createStore } from 'redux';
+import rootReducer from './reducer';
 
 const store = createStore(
   rootReducer,

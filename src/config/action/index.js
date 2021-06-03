@@ -1,90 +1,66 @@
-export function addProduct(
-  textName,
-  textProductFunction,
-  textDetail,
-  textNigp,
-  productModules
-) {
+export function addProduct(textName, textfunction, textDetail, textNigp, productModules) {
   return {
-    type: "ADD_PRODUCT",
+    type: 'ADD_PRODUCT',
     payload: {
       name: textName,
-      productFunction: textProductFunction,
+      prdFunction: textfunction,
       detail: textDetail,
       nigp: textNigp,
-      productModules: productModules,
+      productModules,
     },
   };
 }
 
-export function changeProduct(
-  productSelected,
-  name,
-  productFunction,
-  detail,
-  nigp
-) {
+export function changeProduct(productSelected, name, prdFunction, detail, nigp) {
   return {
-    type: "CHANGE_PRODUCT",
+    type: 'CHANGE_PRODUCT',
     payload: {
       id: productSelected.id,
-      name: name,
-      productFunction: productFunction,
-      detail: detail,
-      nigp: nigp,
+      name,
+      prdFunction,
+      detail,
+      nigp,
     },
   };
 }
 
 export function deleteProduct(product) {
   return {
-    type: "DELETE_PRODUCT",
+    type: 'DELETE_PRODUCT',
     payload: { id: product.id },
   };
 }
 
 // Module
-export function addModule(
-  moduleProtected,
-  fieldLabel,
-  fieldName,
-  fieldData,
-  fieldDes
-) {
+export function addModule(moduleProtected, label, name, data, des) {
   return {
-    type: "ADD_MODULE",
+    type: 'ADD_MODULE',
     payload: {
       moduleProtectedId: moduleProtected.id,
-      fieldLabel: fieldLabel,
-      fieldName: fieldName,
-      fieldData: fieldData,
-      fieldDes: fieldDes,
+      label,
+      name,
+      data,
+      des,
     },
   };
 }
 
-export function changeModule(
-  moduleSelected,
-  fieldLabel,
-  fieldName,
-  fieldData,
-  fieldDes
-) {
+export function changeModule(moduleSelected, label, name, data, des) {
   return {
-    type: "CHANGE_MODULE",
+    type: 'CHANGE_MODULE',
     payload: {
       id: moduleSelected,
-      fieldLabel: fieldLabel,
-      fieldName: fieldName,
-      fieldData: fieldData,
-      fieldDes: fieldDes,
+      label,
+      name,
+      data,
+      des,
     },
   };
 }
 
 export function deleteModule(module) {
   return {
-    type: "DELETE_MODULE",
+    type: 'DELETE_MODULE',
     payload: { id: module.id },
   };
 }
