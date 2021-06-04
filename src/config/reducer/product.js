@@ -46,18 +46,12 @@ export default function productReducer(state = initialState, { type, payload }) 
     }
     case 'CHANGE_PRODUCT': {
       const { id, name, prdFunction, detail, nigp } = payload;
-      return state.products.map((product) => {
-        if (product.id !== id) {
-          return product;
-        }
-        return {
-          ...product,
-          name,
-          prdFunction,
-          detail,
-          nigp,
-        };
-      });
+      return {
+        ...state,
+        products: state.products.map((content, i) =>
+          i === id ? { ...content, name, prdFunction, detail, nigp } : content
+        ),
+      };
     }
     case 'DELETE_PRODUCT': {
       return {
@@ -85,18 +79,12 @@ export default function productReducer(state = initialState, { type, payload }) 
     }
     case 'CHANGE_MODULE': {
       const { id, label, name, data, des } = payload;
-      return state.productModules.map((module) => {
-        if (module.id !== id) {
-          return module;
-        }
-        return {
-          ...module,
-          label,
-          name,
-          data,
-          des,
-        };
-      });
+      return {
+        ...state,
+        productModules: state.productModules.map((content, i) =>
+          i === id ? { ...content, name, label, data, des } : content
+        ),
+      };
     }
     case 'DELETE_MODULE': {
       return {
