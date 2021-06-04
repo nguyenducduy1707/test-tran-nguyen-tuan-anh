@@ -6,7 +6,7 @@ const initialState = {
       prdFunction: 'fc 0',
       detail: 'detail 0',
       nigp: 'nigp 0',
-      modules: [0, 1], // id của productModules
+      productModules: [0, 1], // id của productModules
     },
   ],
   productModules: [
@@ -45,11 +45,11 @@ export default function productReducer(state = initialState, { type, payload }) 
       };
     }
     case 'CHANGE_PRODUCT': {
-      const { id, name, prdFunction, detail, nigp } = payload;
+      const { id, name, prdFunction, detail, nigp, productModules } = payload;
       return {
         ...state,
         products: state.products.map((content, i) =>
-          i === id ? { ...content, name, prdFunction, detail, nigp } : content
+          i === id ? { ...content, name, prdFunction, detail, nigp, productModules } : content
         ),
       };
     }
@@ -89,7 +89,12 @@ export default function productReducer(state = initialState, { type, payload }) 
     case 'DELETE_MODULE': {
       return {
         ...state,
-        productModules: state.productModules.filter((todo) => todo.id !== payload.id),
+        productModules: state.productModules.filter(
+          (productModules) => productModules.id !== payload.id
+        ),
+        products: state.products.filter((product) =>
+          product.productModules.filter((productModules) => productModules.id !== payload.id)
+        ),
       };
     }
 

@@ -2,22 +2,15 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  addProduct,
-  changeModule,
-  changeProduct,
-  deleteModule,
-  deleteProduct,
-} from '../config/action/index';
+import { addProduct, changeProduct, deleteModule, deleteProduct } from '../config/action/index';
+import { detailProductSelector } from '../config/selectors';
 import { IconClose, IconDelete, IconChange } from '../utils/icons';
 
 function Product() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenModalChange, setIsOPenModalChange] = useState(false);
   const [isOpenProductChange, setIsOpenProductChange] = useState(false);
 
   const [selectedProduct, setSelectedProduct] = useState();
-  const [selectedModule, setSelectedModule] = useState();
 
   const dispatch = useDispatch();
 
@@ -124,7 +117,8 @@ function Product() {
         textProductChange.name,
         textProductChange.prdFunction,
         textProductChange.detail,
-        textProductChange.nigp
+        textProductChange.nigp,
+        textProductChange.module
       )
     );
     setTextProductChange({
@@ -136,61 +130,8 @@ function Product() {
     });
     setIsOpenProductChange(false);
   };
-  // Module
-
-  const [moduleText, setModuleText] = useState({
-    id: '',
-    fieldLabel: '',
-    fieldName: '',
-    fieldData: '',
-    fieldDes: '',
-  });
-
-  const handleFieldLabelChange = (event) => {
-    setModuleText({
-      ...moduleText,
-      fieldLabel: event.target.value,
-    });
-  };
-
-  const handleFieldNameChange = (event) => {
-    setModuleText({
-      ...moduleText,
-      fieldName: event.target.value,
-    });
-  };
-
-  const handleFieldDataChange = (event) => {
-    setModuleText({
-      ...moduleText,
-      fieldData: event.target.value,
-    });
-  };
-
-  const handleFieldDesChange = (event) => {
-    setModuleText({
-      ...moduleText,
-      fieldDes: event.target.value,
-    });
-  };
-  const handleChangeModule = () => {
-    dispatch(
-      changeModule(
-        selectedModule.id,
-        moduleText.fieldLabel,
-        moduleText.fieldName,
-        moduleText.fieldData,
-        moduleText.fieldDes
-      )
-    );
-    setModuleText({
-      fieldLabel: '',
-      fieldName: '',
-      fieldData: '',
-      fieldDes: '',
-    });
-    setIsOpen(false);
-  };
+  const productSelected = useSelector(detailProductSelector(selectedProduct?.id || 0));
+  console.log('🚀 ~ file: Product.jsx ~ line 13 ~ Product ~ productSelected', productSelected);
   return (
     <div className="w-full h-screen p-5">
       {isOpen && (
@@ -256,7 +197,7 @@ function Product() {
               <div className="mt-7">
                 <div className="flex flex-row items-center justify-between">
                   <p className="text-sm">Product modules</p>
-                  <Link to="/module/1" className="text-sm text-blue-500">
+                  <Link to="/module-add" className="text-sm text-blue-500">
                     Add new module
                   </Link>
                 </div>
@@ -270,7 +211,6 @@ function Product() {
                     </tr>
                   </thead>
                   <tbody>
-                    {' '}
                     {modules.map((module, index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <tr key={index}>
@@ -292,16 +232,11 @@ function Product() {
                             <button type="button" onClick={() => dispatch(deleteModule(module.id))}>
                               <IconDelete />
                             </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setSelectedModule(module);
-                                setIsOpen(false);
-                                setIsOPenModalChange(true);
-                              }}
-                            >
-                              <IconChange />
-                            </button>
+                            <Link to={`/module-update/${module.id}`}>
+                              <button type="button">
+                                <IconChange />
+                              </button>
+                            </Link>
                           </div>
                         </td>
                       </tr>
@@ -327,7 +262,7 @@ function Product() {
             </div>
             <section className="flex flex-col">
               <div>
-                <p className="text-[12px]">Product Name</p>
+                <p className="text-[12px]">Product Name :{selectedProduct.name}</p>
                 <input
                   className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
                   type="text"
@@ -336,7 +271,7 @@ function Product() {
                 />
               </div>
               <div>
-                <p className="text-[12px]">Product Function</p>
+                <p className="text-[12px]">Product Function : {selectedProduct.prdFunction}</p>
                 <textarea
                   className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
                   type="text"
@@ -347,7 +282,7 @@ function Product() {
                 />
               </div>
               <div>
-                <p className="text-[12px]">Product Details:</p>
+                <p className="text-[12px]">Product Details: {selectedProduct.detail}</p>
                 <textarea
                   className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
                   type="text"
@@ -358,7 +293,7 @@ function Product() {
                 />
               </div>
               <div>
-                <p className="text-[12px]">NIGP/UNPSC Codes :</p>
+                <p className="text-[12px]">NIGP/UNPSC Codes :{selectedProduct.nigp}</p>
                 <input
                   className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
                   type="text"
@@ -366,9 +301,56 @@ function Product() {
                   onChange={handleProductNigpChange}
                 />
               </div>
+              <div className="mt-7">
+                <div className="flex flex-row items-center justify-between">
+                  <p className="text-sm">Product modules</p>
+                </div>
+                <table className="w-full p-4 text-left table-auto border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="border border-gray-400 px-2 py-1">Module p</th>
+                      <th className="border border-gray-400 px-2 py-1">Module name</th>
+                      <th className="border border-gray-400 px-2 py-1">Module data</th>
+                      <th className="border border-gray-400 px-2 py-1">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {modules.map((module, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <tr key={index}>
+                        <td className="border border-gray-400 px-2 py-1"> {module.label}</td>
+                        <td className="border border-gray-400 px-2 py-1"> {module.name}</td>
+                        <td className="border border-gray-400 px-2 py-1"> {module.data}</td>
+                        <td className="border border-gray-400 px-2 py-1">
+                          <div className="flex flex-row items-center justify-between">
+                            <input
+                              type="checkbox"
+                              name="toggleModule"
+                              onClick={() => {
+                                setTextProductChange({
+                                  ...textProductChange,
+                                  module: [...textProductChange.module, module.id],
+                                });
+                              }}
+                            />
+                            <button type="button" onClick={() => dispatch(deleteModule(module.id))}>
+                              <IconDelete />
+                            </button>
+                            <Link to={`/module-update/${module.id}`}>
+                              <button type="button">
+                                <IconChange />
+                              </button>
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <button
                 type="button"
-                className="border border-blue-400 bg-blue-500 text-white py-2 px-4 rounded-md"
+                className="border border-blue-400 bg-blue-500 text-white py-2 px-4 rounded-md mt-3"
                 onClick={handleChangeProductDetail}
               >
                 Change product
@@ -377,78 +359,7 @@ function Product() {
           </div>
         </div>
       )}
-      {isOpenModalChange && (
-        <div className="bg-[rgba(192,192,192,0.3)] absolute top-0 left-0 h-full w-full shadow-2xl rounded-xl flex items-center justify-center">
-          <div
-            className="flex flex-col bg-white rounded-md px-5 py-4 max-h-[500px] overflow-y-scroll"
-            style={{ boxShadow: '5px 5px 25px -20px rgba(0,0,0,0.5)' }}
-          >
-            <div className="flex flex-row items-center justify-between mb-5">
-              <p className="text-lg font-bold">Change Module</p>
-              <div aria-hidden="true" onClick={() => setIsOPenModalChange(false)}>
-                <IconClose />
-              </div>
-            </div>
-            <section className="flex flex-col">
-              <div>
-                <p className="text-[12px]">Field Label</p>
-                <input
-                  className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
-                  type="text"
-                  value={moduleText.fieldLabel}
-                  onChange={handleFieldLabelChange}
-                />
-              </div>
-              <div>
-                <p className="text-[12px]">Field Name</p>
-                <textarea
-                  className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
-                  type="text"
-                  cols="10"
-                  rows="5"
-                  value={moduleText.fieldName}
-                  onChange={handleFieldNameChange}
-                />
-              </div>
-              <div>
-                <p className="text-[12px]">Field Data</p>
-                <textarea
-                  className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
-                  type="text"
-                  cols="10"
-                  rows="5"
-                  value={moduleText.fieldData}
-                  onChange={handleFieldDataChange}
-                />
-              </div>
-              <div>
-                <p className="text-[12px]">Field Description</p>
-                <input
-                  className="border w-full border-gray-300 rounded-md text-sm px-2 py-1 focus:outline-none mb-2"
-                  type="text"
-                  value={moduleText.fieldDes}
-                  onChange={handleFieldDesChange}
-                />
-              </div>
-              <button
-                type="button"
-                className="border border-blue-400 bg-blue-500 text-white py-2 px-4 rounded-md"
-                onClick={handleChangeModule}
-              >
-                Change Product
-              </button>
-              <div className="mt-7">
-                <div className="flex flex-row items-center justify-between">
-                  <p className="text-sm">Product modules</p>
-                  <Link to="/module/1" className="text-sm text-blue-500">
-                    Add new module
-                  </Link>
-                </div>
-              </div>
-            </section>
-          </div>
-        </div>
-      )}
+
       <h1 className="font-bold text-lg">Company Product</h1>
       <div className="my-4">
         <button

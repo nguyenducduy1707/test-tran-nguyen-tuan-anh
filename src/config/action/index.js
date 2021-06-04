@@ -11,7 +11,7 @@ export function addProduct(textName, textfunction, textDetail, textNigp, product
   };
 }
 
-export function changeProduct(productSelected, name, prdFunction, detail, nigp) {
+export function changeProduct(productSelected, name, prdFunction, detail, nigp, productModules) {
   return {
     type: 'CHANGE_PRODUCT',
     payload: {
@@ -20,6 +20,7 @@ export function changeProduct(productSelected, name, prdFunction, detail, nigp) 
       prdFunction,
       detail,
       nigp,
+      productModules,
     },
   };
 }
